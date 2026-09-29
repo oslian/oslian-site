@@ -134,6 +134,9 @@ button { font: inherit; color: inherit; }
 .c-ring { fill: none; stroke: var(--focus); stroke-width: 2; }
 .c-pulse { fill: var(--ink); opacity: .25; transform-box: fill-box; transform-origin: center; animation: pulse 2s ease-out infinite; }
 @keyframes pulse { 0% { transform: scale(1); opacity: .35; } 80%, 100% { transform: scale(3.2); opacity: 0; } }
+.pt { opacity: 0; transform: scale(.3); transform-box: fill-box; transform-origin: center; transition: opacity .3s ease, transform .45s cubic-bezier(.2, .9, .3, 1.35); }
+.pt.is-in { opacity: 1; transform: none; }
+.c-ring { transition: cx .15s ease, cy .15s ease; }
 
 /* Section scaffolding */
 .section { padding-block: clamp(72px, 9vw, 120px); border-top: 1px solid var(--line); }
@@ -141,26 +144,42 @@ button { font: inherit; color: inherit; }
 .section h2 { font-size: clamp(32px, 4.2vw, 54px); line-height: 1.08; letter-spacing: -0.025em; }
 .section-head p { font-size: 18px; color: var(--muted); }
 
-/* Products: tabbed sequence runner */
+/* Products: tabs, step list, and a worked example for the selected step */
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 40px; overflow-x: auto; }
 .tab { min-height: 48px; padding: 0 4px; margin-right: 28px; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; font-size: 18px; font-weight: 500; color: var(--muted); cursor: pointer; white-space: nowrap; }
 .tab:hover { color: var(--ink); }
 .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
-.flow { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
-.flow-intro { display: flex; flex-direction: column; gap: 18px; }
+.flow { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
+.flow-intro { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 .flow-intro h3 { font-size: 28px; letter-spacing: -0.015em; }
 .flow-intro p { font-size: 17px; color: var(--muted); }
-.flow-intro .btn { align-self: flex-start; margin-top: 6px; }
-.steps { display: flex; flex-direction: column; }
-.step { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 16px; padding: 18px 0; border-top: 1px solid var(--line); transition: background-color .25s; }
-.step:last-child { border-bottom: 1px solid var(--line); }
-.step-n { grid-row: span 2; width: 28px; height: 28px; margin-top: 1px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 12px; color: var(--faint); transition: all .25s; }
-.step-t { font-size: 17px; font-weight: 500; color: var(--muted); transition: color .25s; }
-.step-d { font-size: 15px; color: var(--faint); transition: color .25s; }
-.step.is-active .step-n { background: var(--forecast); border-color: var(--forecast); color: var(--surface); transform: scale(1.1); }
-.step.is-active .step-t, .step.is-done .step-t { color: var(--ink); }
-.step.is-active .step-d, .step.is-done .step-d { color: var(--muted); }
-.step.is-done .step-n { border-color: var(--ink); color: var(--ink); }
+.steps { display: flex; flex-direction: column; margin-top: 10px; }
+.steps li { border-top: 1px solid var(--line); }
+.steps li:last-child { border-bottom: 1px solid var(--line); }
+.step { width: 100%; display: grid; grid-template-columns: 36px minmax(0, 1fr) 16px; align-items: center; gap: 14px; min-height: 56px; padding: 10px 0; background: none; border: 0; text-align: left; cursor: pointer; }
+.step-n { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 12px; color: var(--faint); transition: background-color .2s, border-color .2s, color .2s; }
+.step-t { font-size: 16.5px; font-weight: 500; color: var(--muted); transition: color .2s; }
+.step-go { color: var(--faint); opacity: 0; transform: translateX(-4px); transition: opacity .2s, transform .2s; }
+.step:hover .step-t { color: var(--ink); }
+.step:hover .step-go { opacity: 1; transform: none; }
+.step[aria-current="step"] .step-n { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.step[aria-current="step"] .step-t { color: var(--ink); }
+.step[aria-current="step"] .step-go { opacity: 1; transform: none; color: var(--ink); }
+.example { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 2.6vw, 32px); display: flex; flex-direction: column; gap: 16px; min-width: 0; transition: opacity .16s ease, transform .16s ease; }
+.example.is-swap { opacity: 0; transform: translateY(6px); }
+.ex-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.ex-step { font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+.ex-tag { margin-left: auto; font-size: 12.5px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px; white-space: nowrap; }
+.ex-what { font-size: 15.5px; color: var(--muted); }
+.ex-io { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ex-label { font-size: 11.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); }
+.ex-code { margin: 0; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.65; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; white-space: pre; overflow-x: auto; font-variant-numeric: tabular-nums; }
+.ex-code.is-out { border-color: var(--forecast); }
+.ex-arrow { align-self: center; color: var(--faint); line-height: 1; }
+.ex-note { font-size: 14.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; }
+.ex-nav { display: flex; justify-content: space-between; gap: 12px; }
+.ex-nav button { min-height: 40px; padding: 0 4px; background: none; border: 0; font-size: 14.5px; font-weight: 500; color: var(--accent); cursor: pointer; }
+.ex-nav button:disabled { color: var(--faint); opacity: .5; cursor: default; }
 
 /* Approach band */
 .band { background: var(--band); color: var(--band-ink); padding-block: clamp(72px, 9vw, 120px); }
@@ -231,6 +250,7 @@ button { font: inherit; color: inherit; }
   .principles, .seven { grid-template-columns: minmax(0, 1fr); }
   .chart-tools { margin-left: 0; width: 100%; justify-content: space-between; }
   .footer-links { margin-left: 0; }
+  .ex-code { font-size: 12px; padding: 10px 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -312,9 +332,9 @@ button { font: inherit; color: inherit; }
         <div class="flow-intro">
           <h3 id="flowTitle"></h3>
           <p id="flowDesc"></p>
-          <button class="btn btn-quiet btn-sm" id="runBtn" type="button">Run the sequence</button>
+          <ol class="steps" id="steps" aria-label="Steps, select one to see a worked example"></ol>
         </div>
-        <ol class="steps" id="steps"></ol>
+        <div class="example" id="example" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -437,8 +457,11 @@ button { font: inherit; color: inherit; }
       hist: [[-22, 1.21], [-10, 1.34], [0, 1.48]],
       fc: { 6: 1.48, 12: 1.48 } }
   };
-  var state = { sig: 'heart_rate', shown: 0, fc: 0, active: null, timers: [], raf: 0, streaming: false };
-  var host = $('chartHost'), readout = $('readout');
+  /* One timeline sweeps the whole axis left to right at a single pace:
+     24 h of history, a short beat at "Now", then 48 h of forecast. */
+  var HIST_MS = 1100, PAUSE_MS = 260, FC_MS = 2200, TOTAL_MS = HIST_MS + PAUSE_MS + FC_MS;
+  var state = { sig: 'heart_rate', hour: 48, playing: false, raf: 0, fallback: 0, active: null, lastShown: -2, phase: '' };
+  var host = $('chartHost'), readout = $('readout'), geo = null, lastW = 0;
 
   function points() {
     var s = SIGNALS[state.sig], pts = [];
@@ -449,11 +472,16 @@ button { font: inherit; color: inherit; }
     return pts;
   }
   function fmt(v, dp) { return v.toFixed(dp); }
-  function visible(p, i, nHist) { return p.kind === 'obs' || p.kind === 'now' ? i < state.shown : state.fc >= 1 || (state.fc > 0 && p.h <= 48 * state.fc); }
+  function hourAt(ms) {
+    if (ms <= HIST_MS) return -24 + 24 * ms / HIST_MS;
+    if (ms <= HIST_MS + PAUSE_MS) return 0;
+    return Math.min(48, 48 * (ms - HIST_MS - PAUSE_MS) / FC_MS);
+  }
 
-  function render() {
+  function build() {
     var s = SIGNALS[state.sig];
     var W = Math.max(280, Math.floor(host.clientWidth));
+    lastW = W;
     var narrow = W < 640;
     var H = narrow ? 280 : 380;
     var m = { l: narrow ? 40 : 52, r: narrow ? 16 : 28, t: 40, b: 34 };
@@ -464,6 +492,7 @@ button { font: inherit; color: inherit; }
     lo -= span * 0.3; hi += span * 0.3;
     function x(h) { return m.l + (h + 24) / 72 * pw; }
     function y(v) { return m.t + (1 - (v - lo) / (hi - lo)) * ph; }
+    function xy(p) { return x(p.h) + ',' + y(p.v); }
 
     host.textContent = '';
     var root = svg('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': s.name + ': observed history and forecasts' }, host);
@@ -483,81 +512,97 @@ button { font: inherit; color: inherit; }
     if (!narrow) svg('text', { x: W - m.r, y: 22, 'text-anchor': 'end', class: 'c-head-r' }, root).textContent = 'Point estimates only';
     svg('line', { x1: x(0), x2: x(0), y1: m.t - 6, y2: m.t + ph, class: 'c-cut' }, root);
 
-    var histPts = pts.slice(0, nHist).filter(function (p, i) { return i < state.shown; });
-    if (histPts.length > 1) svg('polyline', { points: histPts.map(function (p) { return x(p.h) + ',' + y(p.v); }).join(' '), class: 'c-obs' }, root);
-    histPts.forEach(function (p) {
-      if (p.kind === 'now') svg('circle', { cx: x(p.h), cy: y(p.v), r: 5, class: 'c-pulse' }, root);
-      svg('circle', { cx: x(p.h), cy: y(p.v), r: p.kind === 'now' ? 5.5 : 4, class: 'c-dot' }, root);
-    });
+    // Lines are revealed by one moving clip edge; markers pop in as the edge reaches them.
+    var defs = svg('defs', {}, root), clip = svg('clipPath', { id: 'revealClip' }, defs);
+    var clipRect = svg('rect', { x: 0, y: 0, width: 0, height: H }, clip);
+    var lines = svg('g', { 'clip-path': 'url(#revealClip)' }, root);
+    var hp = pts.slice(0, nHist), fcs = pts.slice(nHist);
+    svg('polyline', { points: hp.map(xy).join(' '), class: 'c-obs' }, lines);
+    if (fcs.length) svg('polyline', { points: [hp[nHist - 1]].concat(fcs).map(xy).join(' '), class: 'c-fc' }, lines);
 
-    if (state.fc > 0 && state.shown >= nHist) {
-      var defs = svg('defs', {}, root), clip = svg('clipPath', { id: 'fcClip' }, defs);
-      svg('rect', { x: x(0) - 8, y: 0, width: (x(48) - x(0) + 20) * state.fc, height: H }, clip);
-      var g = svg('g', { 'clip-path': 'url(#fcClip)' }, root);
-      var last = pts[nHist - 1], fcs = pts.slice(nHist);
-      svg('polyline', { points: [last].concat(fcs).map(function (p) { return x(p.h) + ',' + y(p.v); }).join(' '), class: 'c-fc' }, g);
-      fcs.forEach(function (p, k) {
-        var cx = x(p.h), cy = y(p.v);
+    var nodes = [];
+    var cut = svg('text', { x: x(0) + 8, y: m.t + ph - 10, class: 'c-cut-label pt' }, root);
+    cut.textContent = 'Forecast starts here';
+    nodes.push({ h: 0.0001, el: cut });
+    pts.forEach(function (p, i) {
+      var g = svg('g', { class: 'pt' }, root), cx = x(p.h), cy = y(p.v);
+      if (p.kind === 'obs' || p.kind === 'now') {
+        if (p.kind === 'now') svg('circle', { cx: cx, cy: cy, r: 5, class: 'c-pulse' }, g);
+        svg('circle', { cx: cx, cy: cy, r: p.kind === 'now' ? 5.5 : 4, class: 'c-dot' }, g);
+      } else {
+        var k = i - nHist;
         if (p.kind === 'model') svg('path', { d: 'M' + cx + ' ' + (cy - 7) + 'L' + (cx + 7) + ' ' + cy + 'L' + cx + ' ' + (cy + 7) + 'L' + (cx - 7) + ' ' + cy + 'Z', class: 'c-mark' }, g);
         else svg('rect', { x: cx - 5.5, y: cy - 5.5, width: 11, height: 11, class: 'c-carry' }, g);
-        if (p.h >= 6 || !narrow) {
-          var above = k % 2 === 0;
-          svg('text', { x: cx, y: above ? cy - 14 : cy + 24, 'text-anchor': p.h === 48 ? 'end' : 'middle', class: 'c-hlabel' }, g).textContent = p.h + 'h';
-        }
-      });
-      svg('text', { x: x(0) + 8, y: m.t + ph - 10, class: 'c-cut-label' }, root).textContent = 'Forecast starts here';
-    }
+        if (p.h >= 6 || !narrow) svg('text', { x: cx, y: k % 2 === 0 ? cy - 14 : cy + 24, 'text-anchor': p.h === 48 ? 'end' : 'middle', class: 'c-hlabel' }, g).textContent = p.h + 'h';
+      }
+      nodes.push({ h: p.h, el: g, i: i });
+    });
+    var ring = svg('circle', { r: 11, class: 'c-ring', visibility: 'hidden' }, root);
+    geo = { x: x, y: y, W: W, pts: pts, nHist: nHist, nodes: nodes, clipRect: clipRect, ring: ring };
+    state.lastShown = -2; state.phase = '';
+    apply();
+  }
 
-    if (state.active !== null && pts[state.active] && visible(pts[state.active], state.active, nHist)) {
-      var a = pts[state.active];
-      svg('circle', { cx: x(a.h), cy: y(a.v), r: 11, class: 'c-ring' }, root);
-    }
-    host._x = x; host._pts = pts; host._nHist = nHist;
-    renderReadout();
+  function phaseNow() { return !state.playing ? 'done' : (state.hour < 0 ? 'hist' : 'fc'); }
+  function apply() {
+    if (!geo) return;
+    geo.clipRect.setAttribute('width', Math.max(0, geo.x(state.hour) + (state.hour >= 48 ? 14 : 0)));
+    var shown = -1;
+    geo.nodes.forEach(function (n) {
+      var on = n.h <= state.hour + 1e-6;
+      if (on !== n.on) { n.on = on; n.el.classList.toggle('is-in', on); }
+      if (on && n.i !== undefined && n.i > shown) shown = n.i;
+    });
+    var ph = phaseNow();
+    if (shown !== state.lastShown || ph !== state.phase) { state.lastShown = shown; state.phase = ph; renderReadout(); }
+    placeRing();
+  }
+  function isShown(i) { return geo && i !== null && geo.pts[i] && geo.pts[i].h <= state.hour + 1e-6; }
+  function placeRing() {
+    if (!geo) return;
+    if (isShown(state.active)) {
+      var p = geo.pts[state.active];
+      geo.ring.setAttribute('cx', geo.x(p.h)); geo.ring.setAttribute('cy', geo.y(p.v)); geo.ring.setAttribute('visibility', 'visible');
+    } else geo.ring.setAttribute('visibility', 'hidden');
   }
 
   function renderReadout() {
-    var s = SIGNALS[state.sig], pts = points(), nHist = s.hist.length;
-    var p = state.active !== null ? pts[state.active] : pts[Math.max(0, Math.min(state.shown, nHist) - 1)];
-    var kind, when;
-    if (!p) { readout.innerHTML = '<span class="r-signal"></span>'; return; }
-    if (p.kind === 'obs') { kind = 'Observed'; when = (-p.h) + ' h ago'; }
-    else if (p.kind === 'now') { kind = 'Latest observation'; when = 'now'; }
-    else if (p.kind === 'model') { kind = 'Model forecast'; when = 'in ' + p.h + ' h'; }
-    else { kind = 'Last value carried forward: this cell did not pass validation'; when = 'in ' + p.h + ' h'; }
+    var s = SIGNALS[state.sig];
     readout.textContent = '';
     var a = document.createElement('span'); a.className = 'r-signal'; a.textContent = s.name; readout.appendChild(a);
-    var b = document.createElement('span'); b.className = 'r-value mono'; b.textContent = fmt(p.v, s.dp === 2 ? 2 : (p.v % 1 ? 1 : 0)) + ' ' + s.unit; readout.appendChild(b);
-    var c = document.createElement('span'); c.className = 'r-kind'; c.textContent = kind + ' · ' + when; readout.appendChild(c);
-    if (state.streaming) { var d = document.createElement('span'); d.className = 'r-status'; d.textContent = 'Streaming synthetic observations'; readout.appendChild(d); }
+    var p = geo && (isShown(state.active) ? geo.pts[state.active] : (state.playing ? geo.pts[state.lastShown] : geo.pts[geo.nHist - 1]));
+    if (p) {
+      var kind, when;
+      if (p.kind === 'obs') { kind = 'Observed'; when = (-p.h) + ' h ago'; }
+      else if (p.kind === 'now') { kind = 'Latest observation'; when = 'now'; }
+      else if (p.kind === 'model') { kind = 'Model forecast'; when = 'in ' + p.h + ' h'; }
+      else { kind = 'Last value carried forward: this cell did not pass validation'; when = 'in ' + p.h + ' h'; }
+      var b = document.createElement('span'); b.className = 'r-value mono'; b.textContent = fmt(p.v, s.dp === 2 ? 2 : (p.v % 1 ? 1 : 0)) + ' ' + s.unit; readout.appendChild(b);
+      var c = document.createElement('span'); c.className = 'r-kind'; c.textContent = kind + ' · ' + when; readout.appendChild(c);
+    }
+    if (state.playing) {
+      var d = document.createElement('span'); d.className = 'r-status';
+      d.textContent = state.hour < 0 ? 'Streaming synthetic observations' : 'Forecasting';
+      readout.appendChild(d);
+    }
   }
 
-  function clearTimers() { state.timers.forEach(clearTimeout); state.timers = []; }
-  function revealForecast(done) {
-    if (reduce) { state.fc = 1; render(); if (done) done(); return; }
-    var steps = 36, i = 0;
-    (function tick() {
-      i++;
-      var k = i / steps;
-      state.fc = 1 - Math.pow(1 - k, 3);
-      render();
-      if (i < steps) state.timers.push(setTimeout(tick, 30)); else if (done) done();
-    })();
-  }
-  function replay() {
-    clearTimers();
-    var n = SIGNALS[state.sig].hist.length;
+  function stop() { cancelAnimationFrame(state.raf); clearTimeout(state.fallback); state.playing = false; }
+  function finish() { stop(); state.hour = 48; apply(); }
+  function play() {
+    stop();
     state.active = null;
-    if (reduce) { state.shown = n; state.fc = 1; state.streaming = false; render(); return; }
-    state.shown = 0; state.fc = 0; state.streaming = true; render();
-    for (var i = 1; i <= n; i++) {
-      (function (i) {
-        state.timers.push(setTimeout(function () {
-          state.shown = i; render();
-          if (i === n) revealForecast(function () { state.streaming = false; renderReadout(); });
-        }, i * 340));
-      })(i);
+    if (reduce) { state.hour = 48; build(); return; }
+    state.hour = -24; state.playing = true; build();
+    var t0 = null;
+    function frame(t) {
+      if (t0 === null) t0 = t;
+      var e = t - t0;
+      state.hour = hourAt(e); apply();
+      if (e < TOTAL_MS) state.raf = requestAnimationFrame(frame); else finish();
     }
+    state.raf = requestAnimationFrame(frame);
+    state.fallback = setTimeout(finish, TOTAL_MS + 1200);   // lands on the finished chart even if frames are throttled
   }
 
   var chips = $('chips');
@@ -569,87 +614,161 @@ button { font: inherit; color: inherit; }
       if (state.sig === key) return;
       state.sig = key;
       Array.prototype.forEach.call(chips.children, function (c) { c.setAttribute('aria-pressed', c.dataset.sig === key ? 'true' : 'false'); });
-      replay();
+      play();
     });
     chips.appendChild(b);
   });
-  $('replayBtn').addEventListener('click', replay);
+  $('replayBtn').addEventListener('click', play);
 
+  function setActive(i) { if (i === state.active) return; state.active = i; placeRing(); renderReadout(); }
   host.addEventListener('pointermove', function (e) {
-    if (!host._pts) return;
+    if (!geo) return;
     var r = host.getBoundingClientRect(), px = e.clientX - r.left, best = null, bd = 44;
-    host._pts.forEach(function (p, i) {
-      if (!visible(p, i, host._nHist)) return;
-      var d = Math.abs(host._x(p.h) - px);
+    geo.pts.forEach(function (p, i) {
+      if (!isShown(i)) return;
+      var d = Math.abs(geo.x(p.h) - px);
       if (d < bd) { bd = d; best = i; }
     });
-    if (best !== state.active) { state.active = best; render(); }
+    setActive(best);
   });
-  host.addEventListener('pointerleave', function () { if (state.active !== null) { state.active = null; render(); } });
+  host.addEventListener('pointerleave', function () { setActive(null); });
   host.addEventListener('keydown', function (e) {
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (!geo || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
     e.preventDefault();
-    var pts = points(), vis = [];
-    pts.forEach(function (p, i) { if (visible(p, i, host._nHist)) vis.push(i); });
+    var vis = [];
+    geo.pts.forEach(function (p, i) { if (isShown(i)) vis.push(i); });
     if (!vis.length) return;
-    var cur = state.active === null ? vis.indexOf(host._nHist - 1) : vis.indexOf(state.active);
+    var cur = state.active === null ? vis.indexOf(Math.min(geo.nHist - 1, vis[vis.length - 1])) : vis.indexOf(state.active);
     cur = e.key === 'ArrowRight' ? Math.min(vis.length - 1, cur + 1) : Math.max(0, cur - 1);
-    state.active = vis[cur]; render();
+    setActive(vis[cur]);
   });
-  host.addEventListener('blur', function () { state.active = null; render(); });
+  host.addEventListener('blur', function () { setActive(null); });
+  if (window.ResizeObserver) new ResizeObserver(function () { if (Math.floor(host.clientWidth) !== lastW) build(); }).observe(host);
+  else window.addEventListener('resize', function () { if (Math.floor(host.clientWidth) !== lastW) build(); });
 
-  state.shown = SIGNALS[state.sig].hist.length;
-  state.fc = reduce ? 1 : 0;
-  render();
-  if (!reduce) state.timers.push(setTimeout(function () { revealForecast(); }, 350));
-  if (window.ResizeObserver) new ResizeObserver(function () { render(); }).observe(host);
-  else window.addEventListener('resize', render);
+  // First open: play the whole stream right away when the chart is on screen; otherwise show it finished and play on arrival.
+  if (reduce) { state.hour = 48; build(); }
+  else {
+    var rect = host.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) play();
+    else {
+      state.hour = 48; build();
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); play(); } }, { threshold: 0.35 });
+        io.observe(host);
+      }
+    }
+  }
 
-  /* ---------- Products: sequence runner ---------- */
+  /* ---------- Products: each step with a worked example ---------- */
   var FLOWS = {
-    monitoring: { title: 'Monitoring', desc: 'A FHIR R4 stream becomes a validated, ledgered forecast for every signal, drawn on an anatomical figure. A live synthetic stream and a retrospective replay share one pipeline.', steps: [
-      ['Validate', 'Each FHIR R4 Observation is checked for code, unit and status.'],
-      ['Ledger', 'Every event, retractions included, becomes a row that is never rewritten.'],
-      ['Normalise', 'Units are converted and panels split, so each signal has one unit.'],
-      ['Forecast', 'The pinned model release answers, or the cell says it cannot.'],
-      ['Draw', 'Signals are placed on the body by organ, each with its own chart.']] },
-    medication: { title: 'Medication Safety', desc: 'A deterministic engine ranks drug candidates for an indication and shows every step. A language model only reads free text and narrates a result that is already fixed.', steps: [
-      ['Parse', 'Free text becomes structured case fields. The language model never ranks.'],
-      ['Target', 'The indication maps to the physiological states treatment aims at.'],
-      ['Mechanism', 'Candidates are matched to those states by mechanism of action.'],
-      ['Label', 'Each candidate is checked against its official label text.'],
-      ['Safety gate', 'Patient-specific contraindications remove or flag candidates.']] }
+    monitoring: {
+      title: 'Monitoring',
+      desc: 'A FHIR R4 stream becomes a validated, ledgered forecast for every signal, drawn on an anatomical figure. Select a step to follow one glucose reading through it.',
+      tag: 'Synthetic example',
+      steps: [
+        { t: 'Validate', what: 'Each FHIR R4 Observation is checked for code, unit and status before anything is stored.',
+          input: 'Observation   glucose-0417\ncode          LOINC 15074-8  Glucose [Moles/volume] in Blood\nvalue         8.1 mmol/L\nstatus        final\neffective     Mar 15 08:00Z',
+          output: 'code          recognised\nunit          UCUM, present\nstatus        final\nresult        accepted',
+          note: 'A missing unit, an unmapped code or an entered-in-error status is kept and labelled as such. Nothing is dropped silently.' },
+        { t: 'Ledger', what: 'Every event becomes a row in an append-only ledger.',
+          input: 'glucose-0417  version 1  (accepted)',
+          output: 'ledger row    122\nreceived      11:48:47\nresource      glucose-0417 · v1\nmode          append-only',
+          note: 'If the lab later amends this value, version 2 becomes a new row. Row 122 is never edited.' },
+        { t: 'Normalise', what: 'Units are converted so each signal is charted in one unit.',
+          input: 'glucose       8.1 mmol/L',
+          output: 'glucose       146 mg/dL\nfactor        18.02 mg/dL per mmol/L',
+          note: 'Temperature in °F, split blood-pressure panels and urine volume over a period are handled the same way.' },
+        { t: 'Forecast', what: 'The pinned model release answers each forecast cell, or the cell says it cannot.',
+          input: 'glucose history   5 observations\nlatest            146 mg/dL at Mar 15 08:00Z',
+          output: '+1h    137 mg/dL   model forecast\n+3h    144 mg/dL   model forecast\n+6h    141 mg/dL   model forecast\n+12h   139 mg/dL   model forecast\n+48h   146 mg/dL   last value carried forward',
+          note: 'Glucose at 48 hours did not pass validation, so it carries the last value and says so. No uncertainty interval is claimed.' },
+        { t: 'Draw', what: 'Signals are placed on the body by organ, each with its own trajectory chart.',
+          input: 'glucose   146 mg/dL   5 forecast cells',
+          output: 'organ     pancreas\nview      anatomy · signals and forecasts\nchart     observed history + 5 forecast cells',
+          note: 'This is the glucose trajectory in the chart at the top of this page.' }
+      ]
+    },
+    medication: {
+      title: 'Medication Safety',
+      desc: 'A deterministic engine ranks drug candidates for an indication and shows every step. Select a step to follow one illustrative case through it.',
+      tag: 'Illustrative case',
+      steps: [
+        { t: 'Parse', what: 'Free text becomes structured case fields.',
+          input: '"68-year-old with type 2 diabetes, eGFR 38,\n needs better glucose control"',
+          output: 'age         68\ncondition   type 2 diabetes\neGFR        38 mL/min/1.73m²\ngoal        lower blood glucose',
+          note: 'A language model may do the parsing. Without one, deterministic rules do it. Either way it only fills fields and never ranks.' },
+        { t: 'Target', what: 'The goal maps to the physiological states that treatment aims at.',
+          input: 'goal        lower blood glucose',
+          output: 'target      blood glucose ↓\nrelated     insulin sensitivity ↑',
+          note: 'Targets come from the engine\'s own state vocabulary, not from drug names.' },
+        { t: 'Mechanism', what: 'Candidate classes are matched to the target by mechanism of action.',
+          input: 'target      blood glucose ↓',
+          output: 'biguanide         hepatic glucose output ↓\nSGLT2 inhibitor   renal glucose excretion ↑\nDPP-4 inhibitor   incretin activity ↑',
+          note: 'Every match records the mechanism that justified it, so the ranking can be read back step by step.' },
+        { t: 'Label', what: 'Each candidate is checked against its label text.',
+          input: '3 candidate classes',
+          output: 'checked for   indication\n              renal limits\n              contraindications\n              interactions',
+          note: 'The demo uses illustrative label text, not real FDA labels.' },
+        { t: 'Safety gate', what: 'Patient-specific limits flag or remove candidates before the ranking is fixed.',
+          input: 'eGFR 38 against each label\'s renal section',
+          output: 'renal limit found   candidate flagged, label sentence shown\nno limit found      candidate passes\nranking             fixed before any narration',
+          note: 'A method demonstration. It does not recommend treatment, and nothing can reach an order-entry system.' }
+      ]
+    }
   };
-  var flowKey = 'monitoring', runTimers = [];
-  function renderFlow() {
+  var flowKey = 'monitoring', stepIdx = 0, swapTimer = 0;
+  var stepsEl = $('steps'), exampleEl = $('example');
+  function renderSteps() {
     var f = FLOWS[flowKey];
     $('flowTitle').textContent = f.title; $('flowDesc').textContent = f.desc;
-    var ol = $('steps'); ol.textContent = '';
+    stepsEl.textContent = '';
     f.steps.forEach(function (s, i) {
-      var li = document.createElement('li'); li.className = 'step';
-      li.innerHTML = '<span class="step-n"></span><span class="step-t"></span><span class="step-d"></span>';
-      li.children[0].textContent = i + 1; li.children[1].textContent = s[0]; li.children[2].textContent = s[1];
-      ol.appendChild(li);
+      var li = document.createElement('li'), b = document.createElement('button');
+      b.type = 'button'; b.className = 'step';
+      b.innerHTML = '<span class="step-n"></span><span class="step-t"></span><svg class="step-go" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"></path></svg>';
+      b.children[0].textContent = i + 1; b.children[1].textContent = s.t;
+      b.addEventListener('click', function () { selectStep(i); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); selectStep(Math.max(0, Math.min(f.steps.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1))), true); }
+      });
+      li.appendChild(b); stepsEl.appendChild(li);
     });
   }
-  function runFlow() {
-    runTimers.forEach(clearTimeout); runTimers = [];
-    var items = $('steps').children;
-    Array.prototype.forEach.call(items, function (li) { li.className = 'step'; });
-    if (reduce) { Array.prototype.forEach.call(items, function (li) { li.className = 'step is-done'; }); return; }
-    Array.prototype.forEach.call(items, function (li, i) {
-      runTimers.push(setTimeout(function () {
-        if (i > 0) items[i - 1].className = 'step is-done';
-        li.className = 'step is-active';
-      }, i * 620));
+  function fillExample() {
+    var f = FLOWS[flowKey], s = f.steps[stepIdx], n = f.steps.length;
+    exampleEl.textContent = '';
+    function add(tag, cls, text, parent) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; (parent || exampleEl).appendChild(e); return e; }
+    var head = add('div', 'ex-head');
+    add('span', 'ex-step', (stepIdx + 1) + '. ' + s.t, head);
+    add('span', 'ex-tag', f.tag, head);
+    add('p', 'ex-what', s.what);
+    var inp = add('div', 'ex-io'); add('span', 'ex-label', 'In', inp); add('pre', 'ex-code', s.input, inp);
+    add('div', 'ex-arrow', '↓').setAttribute('aria-hidden', 'true');
+    var out = add('div', 'ex-io'); add('span', 'ex-label', 'Out', out); add('pre', 'ex-code is-out', s.output, out);
+    add('p', 'ex-note', s.note);
+    var nav = add('div', 'ex-nav');
+    var prev = add('button', '', '← ' + (stepIdx > 0 ? f.steps[stepIdx - 1].t : 'Previous'), nav); prev.type = 'button'; prev.disabled = stepIdx === 0;
+    var next = add('button', '', (stepIdx < n - 1 ? f.steps[stepIdx + 1].t : 'Next') + ' →', nav); next.type = 'button'; next.disabled = stepIdx === n - 1;
+    prev.addEventListener('click', function () { selectStep(stepIdx - 1); });
+    next.addEventListener('click', function () { selectStep(stepIdx + 1); });
+  }
+  function selectStep(i, focus) {
+    stepIdx = i;
+    Array.prototype.forEach.call(stepsEl.querySelectorAll('.step'), function (b, k) {
+      if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      if (k === i && focus) b.focus();
     });
-    runTimers.push(setTimeout(function () { items[items.length - 1].className = 'step is-done'; }, items.length * 620));
+    clearTimeout(swapTimer);
+    if (reduce) { fillExample(); return; }
+    exampleEl.classList.add('is-swap');
+    swapTimer = setTimeout(function () { fillExample(); exampleEl.classList.remove('is-swap'); }, 160);
   }
   var tabs = document.querySelectorAll('.tab');
   function selectTab(t, focus) {
     Array.prototype.forEach.call(tabs, function (x) { var on = x === t; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; });
     $('flowPanel').setAttribute('aria-labelledby', t.id);
-    flowKey = t.dataset.flow; renderFlow(); runFlow();
+    flowKey = t.dataset.flow; renderSteps(); selectStep(0);
     if (focus) t.focus();
   }
   Array.prototype.forEach.call(tabs, function (t, i) {
@@ -658,12 +777,9 @@ button { font: inherit; color: inherit; }
       if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); selectTab(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length], true); }
     });
   });
-  $('runBtn').addEventListener('click', runFlow);
-  renderFlow();
-  if ('IntersectionObserver' in window) {
-    var seen = false;
-    new IntersectionObserver(function (es, obs) { es.forEach(function (e) { if (e.isIntersecting && !seen) { seen = true; runFlow(); obs.disconnect(); } }); }, { threshold: 0.4 }).observe($('steps'));
-  }
+  renderSteps();
+  stepIdx = 0; fillExample();
+  stepsEl.querySelector('.step').setAttribute('aria-current', 'step');
 
   /* ---------- Model: registry grid ---------- */
   var table = $('registry'), headRow = table.tHead.rows[0], body = table.tBodies[0], cellReadout = $('cellReadout'), picked = null;
