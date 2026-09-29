@@ -21,7 +21,6 @@
   --band: #0B2A5E; --band-ink: #FFFFFF; --band-muted: #C3D3E8; --band-line: #3B5A8C; --band-link: #A9CBEE;
   --cell-model: #0B2A5E; --cell-empty: #F1F0EC; --hatch: #7F9CC0;
   --focus: #2F7DB8; --header-bg: rgba(251, 250, 247, 0.86);
-  --body: #E7EBF0; --organ: #AFC3DA; --organ-hover: #8FAACB;
   --logo-light: block; --logo-dark: none;
   --font-sans: 'IBM Plex Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
@@ -36,7 +35,6 @@
     --band: #10233F; --band-ink: #F2F6FB; --band-muted: #B3C4DA; --band-line: #2C4A74; --band-link: #A9CBEE;
     --cell-model: #A9CBEE; --cell-empty: #152033; --hatch: #5A7DA8;
     --focus: #6FB0E4; --header-bg: rgba(10, 17, 29, 0.86);
-    --body: #172234; --organ: #3B577E; --organ-hover: #56769F;
     --logo-light: none; --logo-dark: block;
     color-scheme: dark;
   }
@@ -49,7 +47,6 @@
   --band: #10233F; --band-ink: #F2F6FB; --band-muted: #B3C4DA; --band-line: #2C4A74; --band-link: #A9CBEE;
   --cell-model: #A9CBEE; --cell-empty: #152033; --hatch: #5A7DA8;
   --focus: #6FB0E4; --header-bg: rgba(10, 17, 29, 0.86);
-  --body: #172234; --organ: #3B577E; --organ-hover: #56769F;
   --logo-light: none; --logo-dark: block;
   color-scheme: dark;
 }
@@ -191,42 +188,34 @@ button { font: inherit; color: inherit; }
 .seven b { display: block; font-weight: 500; }
 .seven span.d { font-size: 15px; color: var(--band-muted); }
 
-/* Model: a one-line tally of all 41 forecasts, then a body figure you explore organ by organ */
-.model-head { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 80px); align-items: end; margin-bottom: clamp(36px, 5vw, 56px); }
-.model-lead { display: flex; flex-direction: column; gap: 18px; }
-.model-lead p { font-size: 18px; color: var(--muted); max-width: 38em; }
-.tally { display: flex; flex-direction: column; gap: 14px; }
-.dots { display: flex; flex-wrap: wrap; gap: 6px; }
-.dot { width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box; transition: opacity .25s ease, transform .25s ease; }
-.dot.is-model, .sw.is-model { background: var(--cell-model); }
-.dot.is-carry, .sw.is-carry { border: 1.5px solid var(--hatch); }
-.dots.has-focus .dot { opacity: .2; }
-.dots.has-focus .dot.is-focus { opacity: 1; transform: scale(1.15); }
-.tally-legend { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14.5px; color: var(--muted); }
-.tally-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.sw { width: 11px; height: 11px; border-radius: 50%; display: inline-block; box-sizing: border-box; flex-shrink: 0; }
-.explorer { display: grid; grid-template-columns: minmax(180px, 280px) minmax(0, 1fr); gap: clamp(24px, 5vw, 80px); align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 3.4vw, 44px); }
-.body-fig { width: 100%; max-width: 280px; margin-inline: auto; }
-.body-fig svg { display: block; width: 100%; height: auto; }
-.b-sil { fill: var(--body); }
-.b-sil line { stroke: var(--body); stroke-linecap: round; }
-.b-organ-group { cursor: pointer; }
-.b-organ { fill: var(--organ); stroke: var(--body); stroke-width: 3; transition: fill .2s ease; }
-.b-marrow { fill: none; stroke: var(--organ); stroke-width: 6; stroke-linecap: round; transition: stroke .2s ease; }
-.b-organ-group:hover .b-organ { fill: var(--organ-hover); }
-.b-organ-group:hover .b-marrow { stroke: var(--organ-hover); }
-.b-organ-group.is-on .b-organ { fill: var(--cell-model); }
-.b-organ-group.is-on .b-marrow { stroke: var(--cell-model); }
-.organ-chips { margin-bottom: 22px; }
-.panel-stack { display: grid; }
-.panel-stack > .organ-panel { grid-area: 1 / 1; transition: opacity .2s ease; }
-.organ-panel[aria-hidden="true"] { opacity: 0; visibility: hidden; }
-.organ-panel h3 { font-size: 24px; letter-spacing: -0.01em; }
-.organ-sub { font-size: 14.5px; color: var(--muted); margin: 4px 0 14px; }
-.sig { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 2px 16px; padding: 11px 0; border-top: 1px solid var(--line); }
-.sig b { font-weight: 500; font-size: 16px; }
-.sig p { grid-column: 1 / -1; font-size: 14.5px; color: var(--muted); }
-.sig-tag { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); white-space: nowrap; }
+/* Model registry */
+.model { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 6vw, 96px); align-items: start; }
+.model-copy { display: flex; flex-direction: column; gap: 20px; }
+.model-copy p { font-size: 17px; color: var(--muted); }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.filter { display: inline-flex; align-items: center; gap: 8px; }
+.swatch { width: 14px; height: 14px; border-radius: 3px; display: inline-block; flex-shrink: 0; }
+.sw-model { background: var(--cell-model); }
+.sw-carry { background: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 5px); border: 1px solid var(--hatch); }
+.sw-all { background: linear-gradient(90deg, var(--cell-model) 50%, transparent 50%); border: 1px solid var(--cell-model); }
+.cell-readout { border-top: 1px solid var(--line); padding-top: 18px; min-height: 104px; display: flex; flex-direction: column; gap: 4px; }
+.cell-readout .cr-title { font-size: 17px; font-weight: 600; }
+.cell-readout .cr-body { font-size: 15px; color: var(--muted); }
+.registry-scroll { overflow-x: auto; min-width: 0; }
+.registry { border-collapse: separate; border-spacing: 5px; margin: -5px; }
+.registry th { font-weight: 500; }
+.registry thead th { font-family: var(--font-mono); font-size: 12px; color: var(--faint); text-align: center; padding-bottom: 4px; }
+.registry tbody th { text-align: left; font-size: 14px; color: var(--muted); padding-right: 12px; white-space: nowrap; }
+.registry td { padding: 0; }
+.cell { display: block; width: clamp(32px, 4.6vw, 52px); height: 30px; border-radius: 5px; border: 1px solid transparent; padding: 0; cursor: pointer; transition: opacity .2s, transform .15s; }
+.cell:hover { transform: scale(1.08); }
+.cell-model { background: var(--cell-model); }
+.cell-carry { background: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 6px); border-color: var(--hatch); }
+.cell-none { background: var(--cell-empty); cursor: default; }
+.cell-none:hover { transform: none; }
+.cell.is-picked { outline: 2px solid var(--focus); outline-offset: 2px; }
+.registry[data-filter="model"] .cell-carry, .registry[data-filter="carry"] .cell-model { opacity: .15; }
+.registry tbody tr.is-row th { color: var(--ink); }
 
 /* Contact */
 .contact { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; }
@@ -246,8 +235,7 @@ button { font: inherit; color: inherit; }
 @media (max-width: 860px) {
   .nav { display: none; }
   .menu-btn { display: inline-flex; }
-  .showcase, .model-head, .explorer { grid-template-columns: minmax(0, 1fr); }
-  .body-fig { max-width: 190px; }
+  .showcase, .model { grid-template-columns: minmax(0, 1fr); }
   .principles, .seven { grid-template-columns: minmax(0, 1fr); }
   .chart-tools { margin-left: 0; width: 100%; justify-content: space-between; }
   .footer-links { margin-left: 0; }
@@ -390,57 +378,22 @@ button { font: inherit; color: inherit; }
   </section>
 
   <section class="section" id="model">
-    <div class="wrap">
-      <div class="model-head">
-        <div class="model-lead">
-          <h2>Built on WholeBody-JEPA.</h2>
-          <p>One model forecasts signals across the whole body. A forecast is used only if it held up on a second hospital's data. Where it did not, the page shows the last measured value and says so.</p>
+    <div class="wrap model">
+      <div class="model-copy">
+        <h2>Built on WholeBody-JEPA.</h2>
+        <p>A whole-body forecasting model trained on credentialed ICU data and validated across hospitals, one forecast cell at a time. A cell that fails validation carries the last observed value forward and says so.</p>
+        <div class="filters" role="group" aria-label="Filter forecast cells" id="filters">
+          <button class="chip filter" type="button" data-filter="all" aria-pressed="true"><span class="swatch sw-all"></span>All <span class="mono">41</span></button>
+          <button class="chip filter" type="button" data-filter="model" aria-pressed="false"><span class="swatch sw-model"></span>Model forecast <span class="mono">27</span></button>
+          <button class="chip filter" type="button" data-filter="carry" aria-pressed="false"><span class="swatch sw-carry"></span>Carried forward <span class="mono">14</span></button>
         </div>
-        <div class="tally">
-          <div class="dots" id="dots" aria-hidden="true"></div>
-          <div class="tally-legend">
-            <span><i class="sw is-model"></i>27 forecasts passed testing</span>
-            <span><i class="sw is-carry"></i>14 show the last measured value</span>
-          </div>
-        </div>
+        <div class="cell-readout" id="cellReadout" aria-live="polite"></div>
       </div>
-      <div class="explorer">
-        <div class="body-fig">
-          <svg viewBox="0 0 300 548" role="img" aria-label="Body figure. Select an organ to see which of its signals are forecast.">
-            <g class="b-sil">
-              <line x1="92" y1="142" x2="54" y2="300" stroke-width="26"></line>
-              <line x1="208" y1="142" x2="246" y2="300" stroke-width="26"></line>
-              <line x1="124" y1="330" x2="118" y2="522" stroke-width="40"></line>
-              <line x1="176" y1="330" x2="182" y2="522" stroke-width="40"></line>
-              <circle cx="150" cy="56" r="34"></circle>
-              <rect x="134" y="84" width="32" height="34" rx="10"></rect>
-              <path d="M98 118 Q150 104 202 118 Q226 126 228 152 L214 300 Q210 334 192 340 L108 340 Q90 334 86 300 L72 152 Q74 126 98 118 Z"></path>
-            </g>
-            <g class="b-organ-group" data-organ="lungs">
-              <ellipse class="b-organ" cx="123" cy="178" rx="21" ry="36"></ellipse>
-              <ellipse class="b-organ" cx="178" cy="176" rx="18" ry="33"></ellipse>
-            </g>
-            <g class="b-organ-group" data-organ="heart">
-              <ellipse class="b-organ" cx="156" cy="218" rx="14" ry="18" transform="rotate(-30 156 218)"></ellipse>
-            </g>
-            <g class="b-organ-group" data-organ="pancreas">
-              <ellipse class="b-organ" cx="150" cy="260" rx="31" ry="8" transform="rotate(-9 150 260)"></ellipse>
-            </g>
-            <g class="b-organ-group" data-organ="kidneys">
-              <ellipse class="b-organ" cx="121" cy="296" rx="11" ry="18" transform="rotate(10 121 296)"></ellipse>
-              <ellipse class="b-organ" cx="179" cy="296" rx="11" ry="18" transform="rotate(-10 179 296)"></ellipse>
-            </g>
-            <g class="b-organ-group" data-organ="blood">
-              <ellipse class="b-organ" cx="197" cy="246" rx="10" ry="16" transform="rotate(24 197 246)"></ellipse>
-              <line class="b-marrow" x1="123" y1="372" x2="120" y2="470"></line>
-              <line class="b-marrow" x1="177" y1="372" x2="180" y2="470"></line>
-            </g>
-          </svg>
-        </div>
-        <div>
-          <div class="chips organ-chips" role="group" aria-label="Choose an organ" id="organChips"></div>
-          <div class="panel-stack" id="panelStack" aria-live="polite"></div>
-        </div>
+      <div class="registry-scroll">
+        <table class="registry" id="registry" data-filter="all" aria-label="Forecast cells by signal and horizon">
+          <thead><tr><td></td></tr></thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </section>
@@ -742,84 +695,48 @@ button { font: inherit; color: inherit; }
     });
   });
 
-  /* ---------- Model: body explorer, driven by the same release registry ---------- */
-  var ORGANS = [
-    { id: 'heart', chip: 'Heart', name: 'Heart and circulation', signals: ['heart_rate', 'map'] },
-    { id: 'lungs', chip: 'Lungs', name: 'Lungs', signals: ['respiratory_rate', 'o2sat', 'hypoxemia_event'] },
-    { id: 'kidneys', chip: 'Kidneys', name: 'Kidneys and electrolytes', signals: ['urine_output', 'potassium', 'sodium', 'chloride', 'creatinine', 'bun', 'bicarbonate'] },
-    { id: 'pancreas', chip: 'Pancreas', name: 'Pancreas', signals: ['glucose'] },
-    { id: 'blood', chip: 'Blood', name: 'Blood, from bone marrow and spleen', signals: ['hemoglobin', 'hematocrit', 'platelets'] }
-  ];
-  var SIGNAL_NAMES = { heart_rate: 'Heart rate', map: 'Mean arterial pressure', respiratory_rate: 'Respiratory rate', o2sat: 'Oxygen saturation',
-    hypoxemia_event: 'Low-oxygen episodes', urine_output: 'Urine output', glucose: 'Glucose', potassium: 'Potassium', sodium: 'Sodium',
-    chloride: 'Chloride', bicarbonate: 'Bicarbonate', bun: 'Blood urea nitrogen', creatinine: 'Creatinine', hemoglobin: 'Hemoglobin',
-    hematocrit: 'Hematocrit', platelets: 'Platelets' };
-  function unit(h) { return h + (h === 1 ? ' hour' : ' hours'); }
-  function joinHours(list) {
-    if (list.length === 1) return unit(list[0]);
-    return list.slice(0, -1).join(', ') + ' and ' + unit(list[list.length - 1]);
+  /* ---------- Model: registry grid ---------- */
+  var table = $('registry'), headRow = table.tHead.rows[0], body = table.tBodies[0], cellReadout = $('cellReadout'), picked = null;
+  HORIZONS.forEach(function (h) { var th = document.createElement('th'); th.scope = 'col'; th.textContent = h + 'h'; headRow.appendChild(th); });
+  function describe(row, h) {
+    var v = REG[row[0] + '@' + h];
+    if (v === 1) return [row[2] + ' at ' + h + ' hours', 'Model forecast. This cell passed external validation from eICU to MIMIC-IV.'];
+    if (v === 0) return [row[2] + ' at ' + h + ' hours', 'Carries the last observed value forward. This cell did not pass its validation gate, so the model does not answer it.'];
+    return [row[2] + ' at ' + h + ' hours', 'No forecast cell for this signal and horizon in the current release.'];
   }
-  function rangeHours(list) {
-    if (list.length === 1) return unit(list[0]);
-    var idx = list.map(function (h) { return HORIZONS.indexOf(h); });
-    var contiguous = idx.every(function (v, i) { return i === 0 || v === idx[i - 1] + 1; });
-    if (contiguous && list[0] === 1) return 'up to ' + unit(list[list.length - 1]);
-    if (contiguous) return list[0] + ' to ' + unit(list[list.length - 1]);
-    return joinHours(list);
+  function showCell(row, h, btn) {
+    var d = describe(row, h);
+    cellReadout.textContent = '';
+    var t = document.createElement('span'); t.className = 'cr-title'; t.textContent = d[0];
+    var b = document.createElement('span'); b.className = 'cr-body'; b.textContent = d[1];
+    cellReadout.appendChild(t); cellReadout.appendChild(b);
+    if (picked) { picked.classList.remove('is-picked'); picked.closest('tr').classList.remove('is-row'); }
+    picked = btn; if (btn) { btn.classList.add('is-picked'); btn.closest('tr').classList.add('is-row'); }
   }
-  function horizonsOf(sig, v) { return HORIZONS.filter(function (h) { return REG[sig + '@' + h] === v; }); }
-  function sentence(sig) {
-    var m = horizonsOf(sig, 1), c = horizonsOf(sig, 0);
-    if (!m.length) return 'Not forecast yet. Shows the last measured value instead.';
-    var s = 'Forecast ' + rangeHours(m) + ' ahead.';
-    if (c.length) s += ' At ' + joinHours(c) + ', shows the last measured value instead.';
-    return s;
-  }
-  function el(tag, cls, text, parent) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; if (parent) parent.appendChild(e); return e; }
-
-  var dotsEl = $('dots'), chipsEl = $('organChips'), stackEl = $('panelStack');
-  ORGANS.forEach(function (o) {
-    o.signals.forEach(function (sig) {
-      HORIZONS.forEach(function (h) {
-        var v = REG[sig + '@' + h];
-        if (v === undefined) return;
-        var d = el('span', 'dot ' + (v ? 'is-model' : 'is-carry'), undefined, dotsEl);
-        d.dataset.organ = o.id;
-      });
+  ROWS.forEach(function (row) {
+    var tr = document.createElement('tr'), th = document.createElement('th');
+    th.scope = 'row'; th.textContent = row[1]; tr.appendChild(th);
+    HORIZONS.forEach(function (h) {
+      var td = document.createElement('td'), v = REG[row[0] + '@' + h], btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cell ' + (v === 1 ? 'cell-model' : v === 0 ? 'cell-carry' : 'cell-none');
+      btn.setAttribute('aria-label', describe(row, h).join('. '));
+      if (v === undefined) btn.tabIndex = -1;
+      btn.addEventListener('mouseenter', function () { showCell(row, h, btn); });
+      btn.addEventListener('focus', function () { showCell(row, h, btn); });
+      btn.addEventListener('click', function () { showCell(row, h, btn); });
+      td.appendChild(btn); tr.appendChild(td);
     });
-    var b = el('button', 'chip', o.chip, chipsEl);
-    b.type = 'button'; b.dataset.organ = o.id; b.setAttribute('aria-pressed', 'false');
-    b.addEventListener('click', function () { selectOrgan(o.id); });
-
-    var panel = el('div', 'organ-panel', undefined, stackEl);
-    panel.dataset.organ = o.id; panel.setAttribute('aria-hidden', 'true');
-    el('h3', '', o.name, panel);
-    var reach = 0, forecastCount = 0;
-    o.signals.forEach(function (sig) { var m = horizonsOf(sig, 1); if (m.length) { forecastCount++; reach = Math.max(reach, m[m.length - 1]); } });
-    el('p', 'organ-sub', o.signals.length + (o.signals.length === 1 ? ' signal' : ' signals') + ' · ' +
-      (forecastCount ? forecastCount + ' forecast, reaching ' + unit(reach) + ' ahead' : 'none forecast yet'), panel);
-    o.signals.forEach(function (sig) {
-      var row = el('div', 'sig', undefined, panel), forecast = horizonsOf(sig, 1).length > 0;
-      el('b', '', SIGNAL_NAMES[sig], row);
-      var tag = el('span', 'sig-tag', undefined, row);
-      el('i', 'sw ' + (forecast ? 'is-model' : 'is-carry'), undefined, tag);
-      tag.appendChild(document.createTextNode(forecast ? 'Forecast' : 'Last measured value'));
-      el('p', '', sentence(sig), row);
+    body.appendChild(tr);
+  });
+  var hrBtn = body.rows[0].cells[2].firstChild;
+  showCell(ROWS[0], 3, hrBtn);
+  Array.prototype.forEach.call(document.querySelectorAll('.filter'), function (f) {
+    f.addEventListener('click', function () {
+      table.dataset.filter = f.dataset.filter;
+      Array.prototype.forEach.call(document.querySelectorAll('.filter'), function (x) { x.setAttribute('aria-pressed', x === f ? 'true' : 'false'); });
     });
   });
-  var organGroups = document.querySelectorAll('.b-organ-group');
-  function selectOrgan(id) {
-    Array.prototype.forEach.call(organGroups, function (g) { g.classList.toggle('is-on', g.dataset.organ === id); });
-    Array.prototype.forEach.call(chipsEl.children, function (c) { c.setAttribute('aria-pressed', c.dataset.organ === id ? 'true' : 'false'); });
-    Array.prototype.forEach.call(stackEl.children, function (p) { p.setAttribute('aria-hidden', p.dataset.organ === id ? 'false' : 'true'); });
-    dotsEl.classList.add('has-focus');
-    Array.prototype.forEach.call(dotsEl.children, function (d) { d.classList.toggle('is-focus', d.dataset.organ === id); });
-  }
-  Array.prototype.forEach.call(organGroups, function (g) {
-    g.addEventListener('mouseenter', function () { selectOrgan(g.dataset.organ); });
-    g.addEventListener('click', function () { selectOrgan(g.dataset.organ); });
-  });
-  selectOrgan('heart');
 
   /* ---------- Header, menu, copy ---------- */
   var header = $('header');
